@@ -1,5 +1,5 @@
-import {ReverseBits} from './ReverseBits.ts'
 import {readBitsAt} from './readBitsAt.ts'
+import {ReverseBits} from './ReverseBits.ts'
 
 /** Provides private-to-the-library Huffman lookahead while keeping all actual reads strict. */
 export class HuffmanBits extends ReverseBits {

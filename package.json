@@ -2,6 +2,7 @@
   "name": "decode-zstd",
   "version": "0.1.0",
   "type": "module",
+  "description": "small, dependency-free JavaScript Zstandard decompressor",
   "funding": "https://github.com/sponsors/Jaid",
   "license": "MIT",
   "repository": {
@@ -32,8 +33,6 @@
     "typescript": "npm:typescript-classic@6.0.4",
     "@types/bun": "1.4.2"
   },
-  "description": "small, dependency-free JavaScript Zstandard decompressor",
-  "sideEffects": false,
   "files": [
     "src",
     "docs/entropy.md",
@@ -42,5 +41,6 @@
     "docs/licenses/zstandard.txt",
     "readme.md",
     "license.txt"
-  ]
+  ],
+  "sideEffects": false
 }

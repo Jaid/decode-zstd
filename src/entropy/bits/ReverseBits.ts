@@ -7,16 +7,23 @@ export class ReverseBits {
   protected position: number
 
   constructor(data: Uint8Array) {
-    if (data.length === 0 || data[data.length - 1] === 0) {
+    if (data.length === 0 || data.at(-1) === 0) {
       throw new Error('Reverse bitstream is empty or missing its end marker.')
     }
     this.data = data
-    this.position = (data.length - 1) * 8 + Math.floor(Math.log2(data[data.length - 1]))
+    this.position = (data.length - 1) * 8 + Math.floor(Math.log2(data.at(-1)))
   }
 
   /** Returns the number of unread payload bits. */
   get remaining(): number {
     return this.position
+  }
+
+  /** Requires exact consumption of the payload. */
+  finish(): void {
+    if (this.position !== 0) {
+      throw new Error(`Reverse bitstream has ${this.position} unconsumed bits.`)
+    }
   }
 
   /** Reads zero through 32 bits as an unsigned number, without reversing bits within a field. */
@@ -27,12 +34,5 @@ export class ReverseBits {
     }
     this.position -= count
     return readBitsAt(this.data, this.position, count)
-  }
-
-  /** Requires exact consumption of the payload. */
-  finish(): void {
-    if (this.position !== 0) {
-      throw new Error(`Reverse bitstream has ${this.position} unconsumed bits.`)
-    }
   }
 }
