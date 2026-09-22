@@ -1,0 +1,1 @@
+No runtime dependencies, WebAssembly, native bindings, subprocesses or platform decompression APIs. The decoder runs on current Bun, Node.js and browsers. The aggressive production ESM bundle is approximately 13 kb before transport compression.
