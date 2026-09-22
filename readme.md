@@ -4,9 +4,13 @@
 
 small, dependency-free JavaScript Zstandard decompressor
 
-## intro
+## minimal example
 
-No runtime dependencies, WebAssembly, native bindings, subprocesses or platform decompression APIs. The decoder runs on current Bun, Node.js and browsers. The aggressive production ESM bundle is approximately 13 kb before transport compression.
+```typescript
+import decodeZstd from 'decode-zstd'
+
+const raw = decodeZstd(buffer)
+```
 
 ## features
 
@@ -20,8 +24,6 @@ No runtime dependencies, WebAssembly, native bindings, subprocesses or platform 
 
 Streaming and custom dictionaries are intentionally out of scope. Nonzero dictionary IDs are rejected explicitly. Legacy Zstandard versions and the nonstandard magicless API format are not supported.
 
-Checksums detect accidental corruption, not malicious modification or authenticity. Validation and differential testing are substantial, but are not a formal security audit.
-
 ## installation
 
 <a href="https://npmjs.com/package/decode-zstd"><img src="https://shieldcn.dev/badge/npm-decode--zstd-C23039.svg?variant=secondary&logo=npm" alt="decode-zstd on npm"/></a>
@@ -31,14 +33,6 @@ npm install --save decode-zstd
 ```
 
 ## usage
-
-```typescript
-import decodeZstd from 'decode-zstd'
-
-const raw = decodeZstd(buffer)
-```
-
-`buffer` is a `Uint8Array` (including a Node/Bun `Buffer`) or `ArrayBuffer`. The result is a new `Uint8Array`.
 
 ### API
 
@@ -76,46 +70,11 @@ Messages are diagnostic, not a stable parsing interface. Entropy failures preser
 
 ## legal
 
-Implementation follows the [Zstandard compression format](https://github.com/facebook/zstd/blob/dev/doc/zstd_compression_format.md), including the upstream decompressor errata and permissiveness notes. Runtime code is implemented locally; there is no dependency on another JavaScript Zstandard decoder.
+### Zstandard
 
-Upstream golden fixtures and transcribed format tables are attributed in [third-party notices](docs/third-party-notices.md). The project itself is MIT licensed.
+adapted from Meta’s [Zstandard reference implementation](https://github.com/facebook/zstd)
 
-## development
-
-Additional reference validation:
-
-```sh
-bun run build
-bun run test:browser
-bun run test:reference
-bun scripts/entropy/check-reference.ts
-```
-
-`test:browser` runs the decoder in a current Chromium-family browser. `test:reference` requires the `zstd` CLI and runs 300 deterministic native-encoder round trips plus 10 000 corrupted-frame comparisons by default; override `TRIALS` and `MUTATIONS` to change the corpus size.
-
-`bun run build` produces the aggressive browser-compatible ESM package and declarations under `dist/decode-zstd/production/`.
-
-See [frame fixture provenance](test/fixtures/README.md), [entropy fixture provenance](test/entropy/fixtures/readme.md), [entropy implementation notes](docs/entropy.md) and [third-party notices](docs/third-party-notices.md). Native C fixture generators and reference programs are development tools only and are never included in the decoder runtime.
-
-### setting up
-
-```sh
-git clone git@github.com:Jaid/decode-zstd.git
-cd decode-zstd
-bun install
-```
-
-### linting
-
-```sh
-bun run lint
-```
-
-### testing
-
-```sh
-bun run test
-```
+Copyright © Meta Platforms, Inc. and affiliates – [BSD](https://github.com/facebook/zstd/raw/HEAD/LICENSE)
 
 ## license
 
@@ -123,6 +82,6 @@ bun run test
 Copyright © 2026, Jaid \<jaid.jsx@gmail.com> (https://github.com/jaid)
 
 <!--
-readme generated with tldw v9.7.0 from ./docs and ./docs/tldw
+readme generated with tldw v9.7.0 from ./docs/tldw
 github.com/Jaid/tldw
 -->

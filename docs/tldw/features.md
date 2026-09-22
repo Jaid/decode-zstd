@@ -7,5 +7,3 @@
 - Block, window, sequence, entropy and exact-consumption validation, plus published decompressor errata regressions.
 
 Streaming and custom dictionaries are intentionally out of scope. Nonzero dictionary IDs are rejected explicitly. Legacy Zstandard versions and the nonstandard magicless API format are not supported.
-
-Checksums detect accidental corruption, not malicious modification or authenticity. Validation and differential testing are substantial, but are not a formal security audit.

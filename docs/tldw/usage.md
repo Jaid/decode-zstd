@@ -1,11 +1,3 @@
-```typescript
-import decodeZstd from 'decode-zstd'
-
-const raw = decodeZstd(buffer)
-```
-
-`buffer` is a `Uint8Array` (including a Node/Bun `Buffer`) or `ArrayBuffer`. The result is a new `Uint8Array`.
-
 # API
 
 `decodeZstd` is available as both a default and named export.
