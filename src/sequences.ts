@@ -4,8 +4,8 @@ import type {FseTable} from './entropy/main.ts'
 import {buildFseTable, readFseTable, ReverseBits} from './entropy/main.ts'
 import {invalid} from './errors.ts'
 
-const literalBits = [...Array.from({length: 16}).fill(0), 1, 1, 1, 1, 2, 2, 3, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
-const matchBits = [...Array.from({length: 32}).fill(0), 1, 1, 1, 1, 2, 2, 3, 3, 4, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+const literalBits: Array<number> = [...Array.from({length: 16}, () => 0), 1, 1, 1, 1, 2, 2, 3, 3, 4, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
+const matchBits: Array<number> = [...Array.from({length: 32}, () => 0), 1, 1, 1, 1, 2, 2, 3, 3, 4, 4, 5, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
 function baselines(bits: Array<number>, first: number): Array<number> {
   return bits.map(count => {
     const base = first

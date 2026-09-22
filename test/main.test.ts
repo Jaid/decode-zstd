@@ -46,7 +46,7 @@ test('Default/named API, Uint8Array subviews, Buffer, ArrayBuffer and output own
   expect(result).toEqual(text('hello'))
   expect(result.buffer.byteLength).toBe(5)
   result.fill(0)
-  expect(input).toEqual(snapshot)
+  expect([...input]).toEqual(snapshot)
   expect(decodeZstd(Buffer.from(data))).toEqual(text('hello'))
   expect(decodeZstd(new Uint8Array(data).buffer)).toEqual(text('hello'))
   // @ts-expect-error Invalid input is checked at runtime as well.
@@ -121,7 +121,7 @@ test('Raw and RLE literals in every size format, including empty and zero-sequen
   rejects(frame(compressed(rawLiterals(bytes(), 3, 131_073))))
 })
 function huffmanLiterals(symbols: Array<number>, format: number, treeless = false): Uint8Array {
-  const weights = treeless ? bytes() : rawWeights([...Array.from({length: 65}).fill(0), 1])
+  const weights = treeless ? bytes() : rawWeights([...Array.from({length: 65}, () => 0), 1])
   const segment = Math.ceil(symbols.length / 4)
   const streams = format === 0 ? [reverse(symbols.map(symbol => [symbol - 65, 1]))] : Array.from({length: 4}, (_, i) => reverse(symbols.slice(i * segment, (i + 1) * segment).map(symbol => [symbol - 65, 1])))
   const jump = format === 0 ? bytes() : concat(...streams.slice(0, 3).map(stream => le(stream.length, 2)))
@@ -214,7 +214,7 @@ test('Checksums are frame-local, mandatory when flagged and verified for empty/r
     const content = new Uint8Array(length).fill(65)
     const data = concat(hex('28b52ffd0438'), block(1, bytes(65), true, length), le(checksum(content), 4))
     expect(decodeZstd(data)).toEqual(content)
-    frames.push([...data])
+    frames.push(data.slice())
     data[data.length - 1] ^= 1
     rejects(data, 'CHECKSUM_MISMATCH')
   }
@@ -228,5 +228,5 @@ test('Every truncation of a representative checked frame fails without modifying
   for (let end = 0; end < data.length; end++) {
     rejects(data.subarray(0, end))
   }
-  expect(data).toEqual(snapshot)
+  expect([...data]).toEqual(snapshot)
 })

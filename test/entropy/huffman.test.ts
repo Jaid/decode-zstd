@@ -45,11 +45,11 @@ for (const [index, fixture] of reference.huffman.entries()) {
   })
 }
 test('Canonical codes match the specification; its ABEF byte example swaps E and F', () => {
-  const weights = [...Array.from({length: 65}).fill(0), 4, 3, 2, 0, 1]
+  const weights = [...Array.from({length: 65}, () => 0), 4, 3, 2, 0, 1]
   const {table} = readHuffmanTable(rawWeights(weights))
   expect(table.tableLog).toBe(4)
-  expect([...table.symbols]).toEqual([69, 70, 67, 67, 66, 66, 66, 66, ...Array.from({length: 8}).fill(65)])
-  expect([...table.bits]).toEqual([4, 4, 3, 3, 2, 2, 2, 2, ...Array.from({length: 8}).fill(1)])
+  expect([...table.symbols]).toEqual([69, 70, 67, 67, 66, 66, 66, 66, ...Array.from({length: 8}, () => 65)])
+  expect([...table.bits]).toEqual([4, 4, 3, 3, 2, 2, 2, 2, ...Array.from({length: 8}, () => 1)])
   // The supplied specification accidentally swaps E/F in its encoded-byte example.
   expect(decodeHuffman(hex('100d'), 4, table, false)).toEqual((new TextEncoder).encode('ABFE'))
   expect(decodeHuffman(hex('010d'), 4, table, false)).toEqual((new TextEncoder).encode('ABEF'))
@@ -74,7 +74,7 @@ test('Raw Huffman headers honor offsets, high nibbles and unused low-nibble padd
   const implicit = readHuffmanTable(rawWeights([1, 1])).table
   expect(implicit.tableLog).toBe(2)
   expect([...implicit.symbols]).toEqual([0, 1, 2, 2])
-  const last128 = readHuffmanTable(rawWeights([...Array.from({length: 127}).fill(0), 1])).table
+  const last128 = readHuffmanTable(rawWeights([...Array.from({length: 127}, () => 0), 1])).table
   expect([...last128.symbols]).toEqual([127, 128])
 })
 test('FSE weights require two complete initial states and terminate on overflow, not equality', () => {
@@ -158,7 +158,7 @@ test('FSE weight streams enforce 255 explicit weights and log/symbol limits', ()
   expect(() => readHuffmanTable(compressedWeights(counts, fields))).toThrow(/more than 255/)
   const tooHigh = normalized([64, 64], 7).data
   expect(() => readHuffmanTable(Uint8Array.of(tooHigh.length + 1, ...tooHigh, 1))).toThrow(/table log/)
-  const invalidSymbol = normalized([16, ...Array.from({length: 11}).fill(0), 16], 5).data
+  const invalidSymbol = normalized([16, ...Array.from({length: 11}, () => 0), 16], 5).data
   expect(() => readHuffmanTable(Uint8Array.of(invalidSymbol.length + 2, ...invalidSymbol, 0, 4))).toThrow(/maximum symbol/)
 })
 test('Huffman supports maximum depth 11 and rejects invalid canonical trees', () => {
@@ -191,7 +191,7 @@ test('Four streams validate individual sizes, exact output partitions and every 
       end += streams[i].length
       const mutated = [...data]
       mutated[end - 1] = 0
-      expect(() => decodeHuffman(mutated, size, table, true)).toThrow(/marker/)
+      expect(() => decodeHuffman(Uint8Array.from(mutated), size, table, true)).toThrow(/marker/)
     }
   }
   const data = fourStreams([0, 1, 2, 5].map(symbol => encodeHuffman([symbol], table)))

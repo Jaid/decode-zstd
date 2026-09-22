@@ -64,7 +64,7 @@ test('Deterministic malformed full-frame sweep stays within limits and uses type
   const expected = decodeZstd(original)
   const rng = random(0x38_20_AB_73)
   for (let trial = 0; trial < 5000; trial++) {
-    const data = trial % 2 ? [...original] : concat(hex('28b52ffd'), Uint8Array.from({length: rng() % 80}, () => rng() % 256))
+    const data = trial % 2 ? original.slice() : concat(hex('28b52ffd'), Uint8Array.from({length: rng() % 80}, () => rng() % 256))
     if (trial % 2) {
       data[rng() % data.length] ^= 1 << rng() % 8
     }

@@ -51,7 +51,7 @@ test('FSE spreading preserves counts and each symbol covers the entire next-stat
   for (let log = 0; log <= 9; log++) {
     const size = 2 ** log
     for (let trial = 0; trial < 20; trial++) {
-      const counts = Array.from({length: Math.min(16, size)}).fill(0)
+      const counts = Array.from({length: Math.min(16, size)}, () => 0)
       for (let i = 0; i < size; i++) {
         counts[rng() % counts.length]++
       }
@@ -82,7 +82,7 @@ test('FSE spreading preserves counts and each symbol covers the entire next-stat
   }
 })
 test('FSE skips repeated zeros, includes symbol 255 and rounds next past unused padding', () => {
-  const counts = [1, ...Array.from({length: 254}).fill(0), 31]
+  const counts = [1, ...Array.from({length: 254}, () => 0), 31]
   const {data, bits} = normalized(counts, 5)
   const wrapped = Uint8Array.of(99, ...data, 123)
   for (let bit = bits; bit < data.length * 8; bit++) {
@@ -94,7 +94,7 @@ test('FSE skips repeated zeros, includes symbol 255 and rounds next past unused 
   expect(() => readFseTable(wrapped, 1, 254, 5)).toThrow(/maximum symbol/)
 })
 test('FSE rejects invalid parameters, counts, symbol bounds, singleton wire tables and truncation', () => {
-  for (const counts of [[], [1], [33], [-2, 34], [1.5, 30.5], [NaN], [Infinity], Array.from({length: 257}).fill(0)]) {
+  for (const counts of [[], [1], [33], [-2, 34], [1.5, 30.5], [NaN], [Infinity], Array.from({length: 257}, () => 0)]) {
     expect(() => buildFseTable(counts, 5)).toThrow()
   }
   for (const log of [-1, 17, 1.5, NaN, Infinity]) {

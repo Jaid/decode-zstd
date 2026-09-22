@@ -7,11 +7,12 @@ export class ReverseBits {
   protected position: number
 
   constructor(data: Uint8Array) {
-    if (data.length === 0 || data.at(-1) === 0) {
+    const last = data.at(-1)
+    if (last === undefined || last === 0) {
       throw new Error('Reverse bitstream is empty or missing its end marker.')
     }
     this.data = data
-    this.position = (data.length - 1) * 8 + Math.floor(Math.log2(data.at(-1)))
+    this.position = (data.length - 1) * 8 + Math.floor(Math.log2(last))
   }
 
   /** Returns the number of unread payload bits. */
