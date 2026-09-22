@@ -18,7 +18,12 @@
     "#root/*": "./*"
   },
   "scripts": {
-    "test": "bun test --max-concurrency 1 ./test"
+    "build": "build_lib --terser-strength aggressive --copyFiles docs/entropy.md --copyFiles docs/usage.md --copyFiles docs/third-party-notices.md --copyFiles docs/licenses",
+    "lint": "tsc --noEmit --noUnusedLocals --noUnusedParameters --pretty false && tsc -p tsconfig.browser.json --pretty false && eslint . --quiet",
+    "test": "bun test --max-concurrency 1 ./test",
+    "test:browser": "bun scripts/test-browser.ts",
+    "test:reference": "bun scripts/reference-check.ts",
+    "validate": "bun run lint && bun run test && bun run build"
   },
   "devDependencies": {
     "eslint": "10.11.0",
@@ -26,5 +31,16 @@
     "tsconfig-jaid-bun": "16.0.0",
     "typescript": "npm:typescript-classic@6.0.4",
     "@types/bun": "1.4.2"
-  }
+  },
+  "description": "small, dependency-free JavaScript Zstandard decompressor",
+  "sideEffects": false,
+  "files": [
+    "src",
+    "docs/entropy.md",
+    "docs/usage.md",
+    "docs/third-party-notices.md",
+    "docs/licenses/zstandard.txt",
+    "readme.md",
+    "license.txt"
+  ]
 }
